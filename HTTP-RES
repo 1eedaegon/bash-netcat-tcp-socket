@@ -1,0 +1,4 @@
+HTTP/1.1 200\r\n # http protocol version, http status code
+Content-Type: text/html \r\n
+\r\n
+<h1>PING</h1>
