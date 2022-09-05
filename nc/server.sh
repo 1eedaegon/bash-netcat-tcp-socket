@@ -5,7 +5,11 @@ rm -rf response
 # Create new named pipe
 mkfifo response
 
-function handleRequest() {
+function handlePost {
+	echo $1	
+}
+
+function handleRequest {
 	# 1) process the request
 	# 2) Route request to the correct handler
 	# 3) Build a response based on the request
@@ -25,12 +29,21 @@ function handleRequest() {
 	case "$REQUEST" in
 		"GET /") 
 			RESPONSE="HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n</h1>PONG</h1>" ;;
+		"POST /") handlePost $RESPONSE ;;
+
 		*) RESPONSE="HTTP/1.1 404 NotFound\r\n\r\n\r\nNot Found" ;;
 	esac
 	
 	echo -e $RESPONSE > response
 }
 
+function main {
+	handleRequest
+	
+}
 echo "Listening on...."
+# On ubuntu
+# cat response | nc -Nl 3000 | handleRequest 
 
-cat response | nc -lN 3000 | handleRequest 
+# On macos
+cat response | nc -vnl 3000 | handleRequest
